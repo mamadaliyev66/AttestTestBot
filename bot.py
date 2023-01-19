@@ -84,11 +84,11 @@ ova_access_kb=types.InlineKeyboardMarkup().add(only_ova_access_btn)
 only_bt_access_btn=types.InlineKeyboardButton(text='Boshlash',callback_data='only_bt')
 bt_access_kb=types.InlineKeyboardMarkup().add(only_bt_access_btn)
 
-
+user=''
 
 @dp.callback_query_handler(text='tstart')
 async def tstartfun(call:types.CallbackQuery):
-    global len_u
+    global len_u,user
     global math_access_kb
     len_users= list(db.child('Users').get().val().keys())
     math_access=''
@@ -100,7 +100,7 @@ async def tstartfun(call:types.CallbackQuery):
             math_access = db.child('Users').child('u' + str(i)).child('math').get().val()
             bt_access = db.child('Users').child('u' + str(i)).child('bt').get().val()
             ova_access = db.child('Users').child('u' + str(i)).child('ova').get().val()
-
+            user='u' + str(i)
             break
 
     if math_access=='true':
@@ -204,163 +204,173 @@ async def onlyMath(call:types.CallbackQuery):
     global b_option
     global c_option
     global d_option
-    global quest
-    global is_time_finished
-
-    
-    print(call.data)
-    if call.data=='only_math':
-        tests_len=len(db.child('tests').child('matematika').get().val().keys())
-        print(tests_len)
-        random_quests_numbers=[]
-        for i in range(1,100):
-            random_num=random.randint(1,tests_len-2)
-            if random_num not in random_quests_numbers:
-                random_quests_numbers.append(random_num)
-            else:
-                random_num=random.randint(random_num,tests_len-2)
+    global quest,this_user
+    global is_time_finished,start_test_markup
+    if db.child('Users').child(this_user).child('day').get().val()!=datetime.datetime.now().day and db.child('Users').child(this_user).child('mon').get().val()!=datetime.datetime.now().month:
+        print(call.data)
+        if call.data=='only_math':
+            tests_len=len(db.child('tests').child('matematika').get().val().keys())
+            print(tests_len)
+            random_quests_numbers=[]
+            for i in range(1,100):
+                random_num=random.randint(1,tests_len-2)
                 if random_num not in random_quests_numbers:
                     random_quests_numbers.append(random_num)
-            if len(random_quests_numbers)==40:
-                print(random_quests_numbers)
-                break
+                else:
+                    random_num=random.randint(random_num,tests_len-2)
+                    if random_num not in random_quests_numbers:
+                        random_quests_numbers.append(random_num)
+                if len(random_quests_numbers)==40:
+                    print(random_quests_numbers)
+                    break
 
-        quest=db.child('tests').child('matematika').child('t'+str(random_quests_numbers[index_num])).child('quest').child('name').get().val()
-        a_option=db.child('tests').child('matematika').child('t'+str(random_quests_numbers[index_num])).child('a').child('option').get().val()
-        b_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('b').child('option').get().val()
-        c_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('c').child('option').get().val()
-        d_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('d').child('option').get().val()
+            quest=db.child('tests').child('matematika').child('t'+str(random_quests_numbers[index_num])).child('quest').child('name').get().val()
+            a_option=db.child('tests').child('matematika').child('t'+str(random_quests_numbers[index_num])).child('a').child('option').get().val()
+            b_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('b').child('option').get().val()
+            c_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('c').child('option').get().val()
+            d_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('d').child('option').get().val()
 
-        hour = datetime.datetime.now().hour
-        minute = datetime.datetime.now().minute + 1
+            hour = datetime.datetime.now().hour
+            minute = datetime.datetime.now().minute + 1
 
-        await call.message.answer(
-              f"[{index_num+1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
-                reply_markup=answer_select_kb
-        )
-
-        while True:
-            await call.message.edit_text(
-                f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
+            await call.message.answer(
+                  f"[{index_num+1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
+                    reply_markup=answer_select_kb
             )
-            await call.message.pin(disable_notification=True)
-            sleep(1)
-            if hour - datetime.datetime.now().hour<=0:
-                if  minute - datetime.datetime.now().minute<=0:
-                    if datetime.datetime.now().second>55:
-                        await call.message.answer(
-                            "Vaqtingiz Tugagan\n\n"
-                            f"Jami Testlar :{len(random_quests_numbers)}\n\n"
-                            f"Tog'ri Javob : {true_ans_count}"
-                        )
-                        is_time_finished=True
-                        break
 
-    if call.data=='only_ova':
-        tests_len = len(db.child('tests').child('ova').get().val().keys())
-        print(tests_len)
-        random_quests_numbers = []
-        for i in range(1, 100):
-            random_num = random.randint(1, tests_len - 2)
-            if random_num not in random_quests_numbers:
-                random_quests_numbers.append(random_num)
-            else:
-                random_num = random.randint(random_num, tests_len - 2)
+            while True:
+                await call.message.edit_text(
+                    f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
+                )
+                await call.message.pin(disable_notification=True)
+                sleep(1)
+                if hour - datetime.datetime.now().hour<=0:
+                    if  minute - datetime.datetime.now().minute<=0:
+                        if datetime.datetime.now().second>55:
+                            await call.message.answer(
+                                "Vaqtingiz Tugagan\n\n"
+                                f"Jami Testlar :{len(random_quests_numbers)}\n\n"
+                                f"Tog'ri Javob : {true_ans_count}"
+                            )
+                            is_time_finished=True
+                            break
+
+        if call.data=='only_ova':
+            tests_len = len(db.child('tests').child('ova').get().val().keys())
+            print(tests_len)
+            random_quests_numbers = []
+            for i in range(1, 100):
+                random_num = random.randint(1, tests_len - 2)
                 if random_num not in random_quests_numbers:
                     random_quests_numbers.append(random_num)
-            if len(random_quests_numbers) == 40:
-                print(random_quests_numbers)
-                break
+                else:
+                    random_num = random.randint(random_num, tests_len - 2)
+                    if random_num not in random_quests_numbers:
+                        random_quests_numbers.append(random_num)
+                if len(random_quests_numbers) == 40:
+                    print(random_quests_numbers)
+                    break
 
-        quest = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
-            'quest').child('name').get().val()
-        a_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
-            'a').child('option').get().val()
-        b_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
-            'b').child('option').get().val()
-        c_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
-            'c').child('option').get().val()
-        d_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
-            'd').child('option').get().val()
+            quest = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
+                'quest').child('name').get().val()
+            a_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
+                'a').child('option').get().val()
+            b_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
+                'b').child('option').get().val()
+            c_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
+                'c').child('option').get().val()
+            d_option = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
+                'd').child('option').get().val()
 
-        hour = datetime.datetime.now().hour
-        minute = datetime.datetime.now().minute + 1
+            hour = datetime.datetime.now().hour
+            minute = datetime.datetime.now().minute + 1
 
-        await call.message.answer(
-            f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
-            reply_markup=ova_answer_select_kb
-        )
-
-        while True:
-            await call.message.edit_text(
-                f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
+            await call.message.answer(
+                f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
+                reply_markup=ova_answer_select_kb
             )
-            await call.message.pin(disable_notification=True)
-            sleep(1)
-            if hour - datetime.datetime.now().hour <= 0:
-                if minute - datetime.datetime.now().minute <= 0:
-                    if datetime.datetime.now().second > 55:
-                        await call.message.answer(
-                            "Vaqtingiz Tugagan\n\n"
-                            f"Jami Testlar :{len(random_quests_numbers)}\n\n"
-                            f"Tog'ri Javob : {true_ans_count}\n\n"
-                            "Tesni qayta boshlash uchun /start ni bosing."
-                        )
-                        is_time_finished = True
-                        break
 
-    if call.data=='only_bt':
-        tests_len = len(db.child('tests').child('boshtalim').get().val().keys())
-        print(tests_len)
-        random_quests_numbers = []
-        for i in range(1, 100):
-            random_num = random.randint(1, tests_len - 2)
-            if random_num not in random_quests_numbers:
-                random_quests_numbers.append(random_num)
-            else:
-                random_num = random.randint(random_num, tests_len - 2)
+            while True:
+                await call.message.edit_text(
+                    f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
+                )
+                await call.message.pin(disable_notification=True)
+                sleep(1)
+                if hour - datetime.datetime.now().hour <= 0:
+                    if minute - datetime.datetime.now().minute <= 0:
+                        if datetime.datetime.now().second > 55:
+                            await call.message.answer(
+                                "Vaqtingiz Tugagan\n\n"
+                                f"Jami Testlar :{len(random_quests_numbers)}\n\n"
+                                f"Tog'ri Javob : {true_ans_count}\n\n"
+                                "Tesni qayta boshlash uchun /start ni bosing."
+                            )
+                            is_time_finished = True
+                            break
+
+        if call.data=='only_bt':
+            tests_len = len(db.child('tests').child('boshtalim').get().val().keys())
+            print(tests_len)
+            random_quests_numbers = []
+            for i in range(1, 100):
+                random_num = random.randint(1, tests_len - 2)
                 if random_num not in random_quests_numbers:
                     random_quests_numbers.append(random_num)
-            if len(random_quests_numbers) == 40:
-                print(random_quests_numbers)
-                break
+                else:
+                    random_num = random.randint(random_num, tests_len - 2)
+                    if random_num not in random_quests_numbers:
+                        random_quests_numbers.append(random_num)
+                if len(random_quests_numbers) == 40:
+                    print(random_quests_numbers)
+                    break
 
-        quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-            'quest').child('name').get().val()
-        a_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-            'a').child('option').get().val()
-        b_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-            'b').child('option').get().val()
-        c_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-            'c').child('option').get().val()
-        d_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-            'd').child('option').get().val()
+            quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                'quest').child('name').get().val()
+            a_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                'a').child('option').get().val()
+            b_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                'b').child('option').get().val()
+            c_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                'c').child('option').get().val()
+            d_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                'd').child('option').get().val()
 
-        hour = datetime.datetime.now().hour
-        minute = datetime.datetime.now().minute + 1
+            hour = datetime.datetime.now().hour
+            minute = datetime.datetime.now().minute + 1
 
-        await call.message.answer(
-            f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
-            reply_markup=bt_answer_select_kb
-        )
-
-        while True:
-            await call.message.edit_text(
-                f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
+            await call.message.answer(
+                f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
+                reply_markup=bt_answer_select_kb
             )
-            await call.message.pin(disable_notification=True)
-            sleep(1)
-            if hour - datetime.datetime.now().hour <= 0:
-                if minute - datetime.datetime.now().minute <= 0:
-                    if datetime.datetime.now().second > 55:
-                        await call.message.answer(
-                            "Vaqtingiz Tugagan\n\n"
-                            f"Jami Testlar :{len(random_quests_numbers)}\n\n"
-                            f"Tog'ri Javob : {true_ans_count}\n\n"
-                            "Tesni qayta boshlash uchun /start ni bosing."
-                        )
-                        is_time_finished = True
-                        break
+
+            while True:
+                await call.message.edit_text(
+                    f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
+                )
+                await call.message.pin(disable_notification=True)
+                sleep(1)
+                if hour - datetime.datetime.now().hour <= 0:
+                    if minute - datetime.datetime.now().minute <= 0:
+                        if datetime.datetime.now().second > 55:
+                            await call.message.answer(
+                                "Vaqtingiz Tugagan\n\n"
+                                f"Jami Testlar :{len(random_quests_numbers)}\n\n"
+                                f"Tog'ri Javob : {true_ans_count}\n\n"
+                                "Tesni qayta boshlash uchun /start ni bosing."
+                            )
+                            is_time_finished = True
+                            break
+    else:
+        db.child('Users').child(this_user).update({'math':'false','bt':'false','ova':'false'})
+        await call.message.edit_text(
+            "Sizning obunangizni vaqti Tugatildi. Obuna Muddati 1-oy Bo'ladi\n"
+            "Qayta ishga tushirish uchun Adminga Bo'glaning !\n\n"
+            f"Tartib Raqamingiz: {len_u - 1}\n\n"
+            f"Sizning ID: {user_id}\n\n"
+            'Tel: 👇👇 \n'
+            '+998 91 121 23 99',
+            reply_markup=start_test_markup
+        )
 
 
 
