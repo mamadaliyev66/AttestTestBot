@@ -5,7 +5,7 @@ from time import sleep
 import pandas as pd
 import pyrebase
 from aiogram import Dispatcher,Bot,types,executor
-bot=Bot(token='5842402640:AAGNqNe-ojMVlDzB4YmhQ7RrRYW3dGrRHOI')
+bot=Bot(token='5842402640:AAEyy0s4-6zl7MZ7OxOcaoairvTRAgPF8lY')
 dp=Dispatcher(bot)
 
 
@@ -209,36 +209,52 @@ try:
         global d_option
         global quest,this_user
         global is_time_finished,start_test_markup
-        if db.child('Users').child(this_user).child('day').get().val()!=datetime.datetime.now().day and db.child('Users').child(this_user).child('mon').get().val()!=datetime.datetime.now().month:
+        if db.child('Users').child(this_user).child('day').get().val()==datetime.datetime.now().day and db.child('Users').child(this_user).child('mon').get().val()==datetime.datetime.now().month:
+            db.child('Users').child(this_user).update({'math': 'false', 'bt': 'false', 'ova': 'false'})
+            await call.message.edit_text(
+                "Sizning obunangizni vaqti Tugatildi. Botdan 1-oy davomida faydalanishingiz mumkun\n"
+                "Qayta ishga tushirish uchun Adminga Bo'glaning !\n\n"
+                f"Tartib Raqamingiz: {len_u - 1}\n\n"
+                f"Sizning ID: {user_id}\n\n"
+                'Tel: 👇👇 \n'
+                '+998 91 121 23 99',
+                reply_markup=start_test_markup
+            )
+        else:
             print(call.data)
-            if call.data=='only_math':
-                tests_len=len(db.child('tests').child('matematika').get().val().keys())
+            if call.data == 'only_math':
+                tests_len = len(db.child('tests').child('matematika').get().val().keys())
                 print(tests_len)
-                random_quests_numbers=[]
-                for i in range(1,100):
-                    random_num=random.randint(1,tests_len-2)
+                random_quests_numbers = []
+                for i in range(1, 100):
+                    random_num = random.randint(1, tests_len - 2)
                     if random_num not in random_quests_numbers:
                         random_quests_numbers.append(random_num)
                     else:
-                        random_num=random.randint(random_num,tests_len-2)
+                        random_num = random.randint(random_num, tests_len - 2)
                         if random_num not in random_quests_numbers:
                             random_quests_numbers.append(random_num)
-                    if len(random_quests_numbers)==40:
+                    if len(random_quests_numbers) == 40:
                         print(random_quests_numbers)
                         break
 
-                quest=db.child('tests').child('matematika').child('t'+str(random_quests_numbers[index_num])).child('quest').child('name').get().val()
-                a_option=db.child('tests').child('matematika').child('t'+str(random_quests_numbers[index_num])).child('a').child('option').get().val()
-                b_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('b').child('option').get().val()
-                c_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('c').child('option').get().val()
-                d_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('d').child('option').get().val()
+                quest = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
+                    'quest').child('name').get().val()
+                a_option = db.child('tests').child('matematika').child(
+                    't' + str(random_quests_numbers[index_num])).child('a').child('option').get().val()
+                b_option = db.child('tests').child('matematika').child(
+                    't' + str(random_quests_numbers[index_num])).child('b').child('option').get().val()
+                c_option = db.child('tests').child('matematika').child(
+                    't' + str(random_quests_numbers[index_num])).child('c').child('option').get().val()
+                d_option = db.child('tests').child('matematika').child(
+                    't' + str(random_quests_numbers[index_num])).child('d').child('option').get().val()
 
                 hour = datetime.datetime.now().hour
                 minute = datetime.datetime.now().minute + 80
 
                 await call.message.answer(
-                      f"[{index_num+1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
-                        reply_markup=answer_select_kb
+                    f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
+                    reply_markup=answer_select_kb
                 )
 
                 while True:
@@ -247,18 +263,18 @@ try:
                     )
                     await call.message.pin(disable_notification=True)
                     sleep(1)
-                    if hour - datetime.datetime.now().hour<=0:
-                        if  minute - datetime.datetime.now().minute<=0:
-                            if datetime.datetime.now().second>55:
+                    if hour - datetime.datetime.now().hour <= 0:
+                        if minute - datetime.datetime.now().minute <= 0:
+                            if datetime.datetime.now().second > 55:
                                 await call.message.answer(
                                     "Vaqtingiz Tugagan\n\n"
                                     f"Jami Testlar :{len(random_quests_numbers)}\n\n"
                                     f"Tog'ri Javob : {true_ans_count}"
                                 )
-                                is_time_finished=True
+                                is_time_finished = True
                                 break
 
-            if call.data=='only_ova':
+            if call.data == 'only_ova':
                 tests_len = len(db.child('tests').child('ova').get().val().keys())
                 print(tests_len)
                 random_quests_numbers = []
@@ -311,7 +327,7 @@ try:
                                 is_time_finished = True
                                 break
 
-            if call.data=='only_bt':
+            if call.data == 'only_bt':
                 tests_len = len(db.child('tests').child('boshtalim').get().val().keys())
                 print(tests_len)
                 random_quests_numbers = []
@@ -329,13 +345,17 @@ try:
 
                 quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
                     'quest').child('name').get().val()
-                a_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                a_option = db.child('tests').child('boshtalim').child(
+                    't' + str(random_quests_numbers[index_num])).child(
                     'a').child('option').get().val()
-                b_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                b_option = db.child('tests').child('boshtalim').child(
+                    't' + str(random_quests_numbers[index_num])).child(
                     'b').child('option').get().val()
-                c_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                c_option = db.child('tests').child('boshtalim').child(
+                    't' + str(random_quests_numbers[index_num])).child(
                     'c').child('option').get().val()
-                d_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                d_option = db.child('tests').child('boshtalim').child(
+                    't' + str(random_quests_numbers[index_num])).child(
                     'd').child('option').get().val()
 
                 hour = datetime.datetime.now().hour
@@ -350,7 +370,7 @@ try:
                     await call.message.edit_text(
                         f"Qolgan Vaqtingiz:{hour - datetime.datetime.now().hour}:{minute - datetime.datetime.now().minute}:{60 - datetime.datetime.now().second}"
                     )
-                    await call.message.pin(disable_notification=True)
+                    await call.message.pin()
                     sleep(1)
                     if hour - datetime.datetime.now().hour <= 0:
                         if minute - datetime.datetime.now().minute <= 0:
@@ -363,18 +383,6 @@ try:
                                 )
                                 is_time_finished = True
                                 break
-        else:
-            db.child('Users').child(this_user).update({'math':'false','bt':'false','ova':'false'})
-            await call.message.edit_text(
-                "Sizning obunangizni vaqti Tugatildi. Botdan 1-oy davomida faydalanishingiz mumkun\n"
-                "Qayta ishga tushirish uchun Adminga Bo'glaning !\n\n"
-                f"Tartib Raqamingiz: {len_u - 1}\n\n"
-                f"Sizning ID: {user_id}\n\n"
-                'Tel: 👇👇 \n'
-                '+998 91 121 23 99',
-                reply_markup=start_test_markup
-            )
-
 
 
 
