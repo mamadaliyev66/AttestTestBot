@@ -221,10 +221,8 @@ try:
                 reply_markup=start_test_markup
             )
         else:
-            print(call.data)
             if call.data == 'only_math':
                 tests_len = len(db.child('tests').child('matematika').get().val().keys())
-                print(tests_len)
                 random_quests_numbers = []
                 for i in range(1, 100):
                     random_num = random.randint(1, tests_len - 2)
@@ -235,7 +233,6 @@ try:
                         if random_num not in random_quests_numbers:
                             random_quests_numbers.append(random_num)
                     if len(random_quests_numbers) == 40:
-                        print(random_quests_numbers)
                         break
 
                 quest = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
@@ -276,7 +273,6 @@ try:
 
             if call.data == 'only_ova':
                 tests_len = len(db.child('tests').child('ova').get().val().keys())
-                print(tests_len)
                 random_quests_numbers = []
                 for i in range(1, 100):
                     random_num = random.randint(1, tests_len - 2)
@@ -287,7 +283,6 @@ try:
                         if random_num not in random_quests_numbers:
                             random_quests_numbers.append(random_num)
                     if len(random_quests_numbers) == 40:
-                        print(random_quests_numbers)
                         break
 
                 quest = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child(
@@ -329,7 +324,6 @@ try:
 
             if call.data == 'only_bt':
                 tests_len = len(db.child('tests').child('boshtalim').get().val().keys())
-                print(tests_len)
                 random_quests_numbers = []
                 for i in range(1, 100):
                     random_num = random.randint(1, tests_len - 2)
@@ -340,7 +334,6 @@ try:
                         if random_num not in random_quests_numbers:
                             random_quests_numbers.append(random_num)
                     if len(random_quests_numbers) == 40:
-                        print(random_quests_numbers)
                         break
 
                 quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
@@ -441,7 +434,6 @@ try:
                     reply_markup=bt_answer_select_kb
                 )
             if call.data=='next_quest':
-                print('next')
                 a_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('a').child(
                     'trust').get().val()
                 b_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('b').child(
@@ -450,30 +442,26 @@ try:
                     'trust').get().val()
                 d_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('d').child(
                     'trust').get().val()
-                print(a_check)
-                print(b_check)
-                print(c_check)
-                print(d_check)
                 if a_selected==True:
                     if a_check=='true':
                         true_ans_count+=1
                     else:
-                        print(a_check)
+                        pass
                 if b_selected==True:
                     if b_check=='true':
                         true_ans_count+=1
                     else:
-                        print(b_check)
+                        pass
                 if c_selected==True:
                     if c_check=='true':
                         true_ans_count+=1
                     else:
-                        print(c_check)
+                        pass
                 if d_selected==True:
                     if d_check=='true':
                         true_ans_count+=1
                     else:
-                        print(d_check)
+                        pass
                 if a_selected==False and b_selected==False and c_selected==False and d_selected==False:
                     await call.message.edit_text(
                         f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n❗️Variyantlardan Birini Tanlamasangiz Keyingi Savolga o'ta olmaysiz❗️\n\nJavobingizni Tanlang: \n",
@@ -532,7 +520,7 @@ try:
     ova_c_selected=False
     ova_d_selected=False
     @dp.callback_query_handler(text=["ova_ans_a","ova_ans_b","ova_ans_c","ova_ans_d",'ova_next_quest'])
-    async def AnswerChecker(call:types.CallbackQuery):
+    async def AnswerCheckerOVA(call:types.CallbackQuery):
         global quest,true_ans_count
         global a_option,b_option,c_option,d_option
         global is_time_finished
@@ -576,7 +564,6 @@ try:
                     reply_markup=ova_answer_select_kb
                 )
             if call.data=='ova_next_quest':
-                print('next')
                 ova_a_check = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child('a').child(
                     'trust').get().val()
                 ova_b_check = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child('b').child(
@@ -585,30 +572,26 @@ try:
                     'trust').get().val()
                 ova_d_check = db.child('tests').child('ova').child('t' + str(random_quests_numbers[index_num])).child('d').child(
                     'trust').get().val()
-                print(ova_a_check)
-                print(ova_b_check)
-                print(ova_c_check)
-                print(ova_d_check)
                 if ova_a_selected==True:
                     if ova_a_check=='true':
                         true_ans_count+=1
                     else:
-                        print(ova_a_check)
+                        pass
                 if ova_b_selected==True:
                     if ova_b_check=='true':
                         true_ans_count+=1
                     else:
-                        print(ova_b_check)
+                        pass
                 if ova_c_selected==True:
                     if ova_c_check=='true':
                         true_ans_count+=1
                     else:
-                        print(ova_c_check)
+                        pass
                 if ova_d_selected==True:
                     if ova_d_check=='true':
                         true_ans_count+=1
                     else:
-                        print(ova_d_check)
+                        pass
                 if ova_a_selected==False and ova_b_selected==False and ova_c_selected==False and ova_d_selected==False:
                     await call.message.edit_text(
                         f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n❗️Variyantlardan Birini Tanlamasangiz Keyingi Savolga o'ta olmaysiz❗️\n\nJavobingizni Tanlang: \n",
@@ -671,14 +654,14 @@ try:
     c_selected=False
     d_selected=False
     @dp.callback_query_handler(text=["ans_a","ans_b","ans_c","ans_d",'next_quest'])
-    async def AnswerChecker(call:types.CallbackQuery):
-        global quest,true_ans_count
-        global a_option,b_option,c_option,d_option
+    async def AnswerCheckerMath(call:types.CallbackQuery):
+        global quest, true_ans_count
+        global a_option, b_option, c_option, d_option
         global is_time_finished
-        global a_selected,b_selected,c_selected,d_selected
+        global a_selected, b_selected,c_selected,d_selected
         global index_num
-        if is_time_finished!=True and index_num!=41:
-            if call.data=='ans_a':
+        if is_time_finished != True and index_num != 41:
+            if call.data == 'ans_a':
                 a_selected = True
                 b_selected = False
                 c_selected = False
@@ -687,7 +670,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option} ✅\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=answer_select_kb
                 )
-            if call.data=='ans_b':
+            if call.data == 'ans_b':
                 a_selected = False
                 b_selected = True
                 c_selected = False
@@ -696,7 +679,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option} ✅\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=answer_select_kb
                 )
-            if call.data=='ans_c':
+            if call.data == 'ans_c':
                 a_selected = False
                 b_selected = False
                 c_selected = True
@@ -705,7 +688,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option} ✅\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=answer_select_kb
                 )
-            if call.data=='ans_d':
+            if call.data == 'ans_d':
                 a_selected = False
                 b_selected = False
                 c_selected = False
@@ -714,48 +697,47 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option} ✅\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=answer_select_kb
                 )
-            if call.data=='next_quest':
-                print('next')
-                a_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('a').child(
+            if call.data == 'next_quest':
+                a_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
+                    'a').child(
                     'trust').get().val()
-                b_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('b').child(
+                b_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
+                    'b').child(
                     'trust').get().val()
-                c_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('c').child(
+                c_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
+                    'c').child(
                     'trust').get().val()
-                d_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child('d').child(
+                d_check = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
+                    'd').child(
                     'trust').get().val()
-                print(a_check)
-                print(b_check)
-                print(c_check)
-                print(d_check)
-                if a_selected==True:
-                    if a_check=='true':
-                        true_ans_count+=1
+                if a_selected == True:
+                    if a_check == 'true':
+                        true_ans_count += 1
                     else:
-                        print(a_check)
-                if b_selected==True:
-                    if b_check=='true':
-                        true_ans_count+=1
+                        pass
+                if b_selected == True:
+                    if b_check == 'true':
+                        true_ans_count += 1
                     else:
-                        print(b_check)
-                if c_selected==True:
-                    if c_check=='true':
-                        true_ans_count+=1
+                       pass
+                if ova_c_selected == True:
+                    if c_check == 'true':
+                        true_ans_count += 1
                     else:
-                        print(c_check)
-                if d_selected==True:
-                    if d_check=='true':
-                        true_ans_count+=1
+                        pass
+                if ova_d_selected == True:
+                    if d_check == 'true':
+                        true_ans_count += 1
                     else:
-                        print(d_check)
-                if a_selected==False and b_selected==False and c_selected==False and d_selected==False:
+                        pass
+                if a_selected == False and b_selected == False and c_selected == False and d_selected == False:
                     await call.message.edit_text(
                         f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n❗️Variyantlardan Birini Tanlamasangiz Keyingi Savolga o'ta olmaysiz❗️\n\nJavobingizni Tanlang: \n",
                         reply_markup=answer_select_kb
                     )
 
                 else:
-                    index_num+=1
+                    index_num += 1
                     quest = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
                         'quest').child('name').get().val()
                     a_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
@@ -766,7 +748,6 @@ try:
                         'c').child('option').get().val()
                     d_option = db.child('tests').child('matematika').child('t' + str(random_quests_numbers[index_num])).child(
                         'd').child('option').get().val()
-
 
                     await call.message.edit_text(
                         f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
@@ -784,11 +765,23 @@ try:
             await call.message.edit_text(
                 "Vaqtingiz Allaqachon Tugagan\n\n"
                 f"Jami Testlar :{len(random_quests_numbers)}\n\n"
-                f"Tog'ri Javob : {true_ans_count}\n"
-                f"To'plagan Balingiz: {true_ans_count*2} ball"
+                f"Tog'ri Javob : {true_ans_count}\n\n"
+                f"To'plagan Balingiz: {true_ans_count * 2} ball"
                 "Tesni qayta boshlash uchun /start ni bosing."
 
             )
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1056,7 +1049,6 @@ try:
     @dp.callback_query_handler(text=['bosh_talim_s'])
     async def newTestAddFunctions(call:types.CallbackQuery):
         data=call.data
-        print(data)
         if data=='bosh_talim_s':
             await call.message.edit_text(
                 "Menga Exel Fileni Jo'nating "
@@ -1267,6 +1259,7 @@ try:
 
 except:
     print("Something we went wrong")
+
 
 
 
