@@ -119,7 +119,7 @@ try:
             await call.message.edit_text(
                 "Boshlang'ich Talim Attestatsiya Testlar .\n"
                 "❗️❗️Eslatib O'tamiz : \n\n"
-                "⏰ Sizga 120 daqiqa vaqt beriladi\n"
+                "⏰ Sizga 60 daqiqa vaqt beriladi\n"
                 "60 daqiqadan so'ng test avtomatik tarzda tugatiladi ❗\n\n"
                 "Agar Test Yechish Mobaynida Chiqib Ketib Qolsangiz Test Avtomatik Tugatiladi ❗"
                 ,reply_markup=bt_access_kb
@@ -128,7 +128,7 @@ try:
             await call.message.edit_text(
                 "Ona tili va Adabiyot Fanidan Attestatsiya Testlar .\n"
                 "❗️❗️Eslatib O'tamiz : \n\n"
-                "⏰ Sizga 120 daqiqa vaqt beriladi\n"
+                "⏰ Sizga 60 daqiqa vaqt beriladi\n"
                 "60 daqiqadan so'ng test avtomatik tarzda tugatiladi ❗\n\n"
                 "Agar Test Yechish Mobaynida Chiqib Ketib Qolsangiz Test Avtomatik Tugatiladi ❗"
                 ,reply_markup=ova_access_kb
