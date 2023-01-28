@@ -190,7 +190,7 @@ try:
     bt_c_ans_true=types.InlineKeyboardButton(text='C',callback_data='bt_ans_c')
     bt_d_ans_true=types.InlineKeyboardButton(text='D',callback_data='bt_ans_d')
     bt_next_quest=types.InlineKeyboardButton(text='Keyingi Savol',callback_data='bt_next_quest')
-    bt_answer_select_kb=types.InlineKeyboardMarkup(row_width=2).add(ova_a_ans_true,ova_b_ans_true,ova_c_ans_true,ova_d_ans_true,ova_next_quest)
+    bt_answer_select_kb=types.InlineKeyboardMarkup(row_width=2).add(bt_a_ans_true,bt_b_ans_true,bt_c_ans_true,bt_d_ans_true,bt_next_quest)
 
 
 
@@ -389,7 +389,7 @@ try:
     bt_b_selected=False
     bt_c_selected=False
     bt_d_selected=False
-    @dp.callback_query_handler(text=["ans_a","ans_b","ans_c","ans_d",'next_quest'])
+    @dp.callback_query_handler(text=["bt_ans_a","bt_ans_b","bt_ans_c","bt_ans_d","bt_next_quest"])
     async def AnswerChecker(call:types.CallbackQuery):
         global quest,true_ans_count
         global a_option,b_option,c_option,d_option
@@ -397,7 +397,7 @@ try:
         global a_selected,b_selected,c_selected,d_selected
         global index_num
         if is_time_finished!=True and index_num!=41:
-            if call.data=='ans_a':
+            if call.data=='bt_ans_a':
                 a_selected = True
                 b_selected = False
                 c_selected = False
@@ -406,7 +406,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option} ✅\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=bt_answer_select_kb
                 )
-            if call.data=='ans_b':
+            if call.data=='bt_ans_b':
                 a_selected = False
                 b_selected = True
                 c_selected = False
@@ -415,7 +415,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option} ✅\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=bt_answer_select_kb
                 )
-            if call.data=='ans_c':
+            if call.data=='bt_ans_c':
                 a_selected = False
                 b_selected = False
                 c_selected = True
@@ -424,7 +424,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option} ✅\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=bt_answer_select_kb
                 )
-            if call.data=='ans_d':
+            if call.data=='bt_ans_d':
                 a_selected = False
                 b_selected = False
                 c_selected = False
@@ -433,7 +433,7 @@ try:
                     f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option} ✅\n\n\n\nJavobingizni Tanlang: \n",
                     reply_markup=bt_answer_select_kb
                 )
-            if call.data=='next_quest':
+            if call.data=='bt_next_quest':
                 a_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('a').child(
                     'trust').get().val()
                 b_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('b').child(
@@ -1077,8 +1077,7 @@ try:
                     bt_len = len(db.child('tests').child('boshtalim').get().val().keys())
                     if true_ans[i].lower() == 'a':
                         db.child('tests').child('boshtalim').child('t' + str(bt_len - 1)).set(
-                            {'a': {"option": a[i], "trust": 'true'}, 'b': {"option": b[i], "trust": 'false'},
-                             'c': {"option": c[i], "trust": 'false'}, 'd': {"option": d[i], "trust": 'false'},
+                            {'a': {"option": a[i], "trust": 'true'}, 'b': {"option": b[i], "trust": 'false'},'c': {"option": c[i], "trust": 'false'}, 'd': {"option": d[i], "trust": 'false'},
                              'quest': {"name": quests[i]}})
                     if true_ans[i].lower() == 'b':
                         db.child('tests').child('boshtalim').child('t' + str(bt_len - 1)).set(
