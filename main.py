@@ -396,7 +396,7 @@ try:
         global is_time_finished
         global a_selected,b_selected,c_selected,d_selected
         global index_num
-        if is_time_finished!=True and index_num!=41:
+        if is_time_finished!=True and index_num<41:
             if call.data=='bt_ans_a':
                 a_selected = True
                 b_selected = False
@@ -434,6 +434,7 @@ try:
                     reply_markup=bt_answer_select_kb
                 )
             if call.data=='bt_next_quest':
+
                 a_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('a').child(
                     'trust').get().val()
                 b_check = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child('b').child(
@@ -469,25 +470,31 @@ try:
                     )
 
                 else:
-                    index_num+=1
-                    quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-                        'quest').child('name').get().val()
-                    a_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-                        'a').child('option').get().val()
-                    b_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-                        'b').child('option').get().val()
-                    c_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-                        'c').child('option').get().val()
-                    d_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
-                        'd').child('option').get().val()
+                    if index_num<40:
+                        index_num+=1
+                        quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                            'quest').child('name').get().val()
+                        a_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                            'a').child('option').get().val()
+                        b_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                            'b').child('option').get().val()
+                        c_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                            'c').child('option').get().val()
+                        d_option = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
+                            'd').child('option').get().val()
+                        await call.message.edit_text(
+                            f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
+                            reply_markup=bt_answer_select_kb
+                        )
+                    else:
+                        await call.message.edit_text(
+                            "Vaqtingiz Allaqachon Tugagan\n\n"
+                            f"Jami Testlar :{len(random_quests_numbers)}\n\n"
+                            f"Tog'ri Javob : {true_ans_count}\n"
+                            f"To'plagan Balingiz: {true_ans_count * 2} ball"
+                            "Tesni qayta boshlash uchun /start ni bosing."
 
-
-                    await call.message.edit_text(
-                        f"[{index_num + 1}/40]\nSavol : {quest}\n\nA: {a_option}\nB: {b_option}\nC: {c_option}\nD: {d_option}\n\n\n\nJavobingizni Tanlang: \n",
-                        reply_markup=bt_answer_select_kb
-                    )
-
-
+                        )
 
 
 
