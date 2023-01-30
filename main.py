@@ -376,7 +376,7 @@ try:
                                 )
                                 is_time_finished = True
                                 break
-
+                    
 
 
 
@@ -470,7 +470,7 @@ try:
                     )
 
                 else:
-                    if index_num<40:
+                    if index_num!=39:
                         index_num+=1
                         quest = db.child('tests').child('boshtalim').child('t' + str(random_quests_numbers[index_num])).child(
                             'quest').child('name').get().val()
