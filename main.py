@@ -24,6 +24,17 @@ firebase=pyrebase.initialize_app(firebaseConfig)
 
 db=firebase.database()
 
+random_quests_numbers = []
+index_num = 0
+hour = 0
+minute = 0
+secund = 0
+quest = 0
+a_option = 0
+b_option = 0
+c_option = 0
+d_option = 0
+is_time_finished = False
 
 try:
 
@@ -35,6 +46,18 @@ try:
     user_id=0
     @dp.message_handler(commands=['start'])
     async def start(message:types.Message):
+
+        random_quests_numbers = []
+        index_num = 0
+        hour = 0
+        minute = 0
+        secund = 0
+        quest = 0
+        a_option = 0
+        b_option = 0
+        c_option = 0
+        d_option = 0
+        is_time_finished = False
         global db
         global this_user
         global this_user_access
@@ -155,17 +178,6 @@ try:
 
 
 
-    random_quests_numbers=[]
-    index_num=0
-    hour=0
-    minute=0
-    secund=0
-    quest=0
-    a_option=0
-    b_option=0
-    c_option=0
-    d_option=0
-    is_time_finished=False
     a_ans_true=types.InlineKeyboardButton(text='A',callback_data='ans_a')
     b_ans_true=types.InlineKeyboardButton(text='B',callback_data='ans_b')
     c_ans_true=types.InlineKeyboardButton(text='C',callback_data='ans_c')
@@ -376,7 +388,7 @@ try:
                                 )
                                 is_time_finished = True
                                 break
-                    
+
 
 
 
